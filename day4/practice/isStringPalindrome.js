@@ -1,1 +1,2 @@
-console.log("rotavator is a palindrome");
+const wordToCheck = "rotavator";
+console.log(wordToCheck,"is a palindrome");
