@@ -1,10 +1,13 @@
-const wordToCheck = "racecar";
+// Javascript program to check whether string is palindrome or not.
+
+const wordToCheck = "malayalam";
 
 let isEqual = true;
 let startIndex = 0;
 let lastIndex = wordToCheck.length - 1;
 
-while (startIndex < lastIndex) {
+// Comapring correspoinding letters from both ends
+while ((startIndex < lastIndex) && isEqual) {
   if (wordToCheck[startIndex] !== wordToCheck[lastIndex]) {
     isEqual = false;
   }
