@@ -88,14 +88,30 @@ Explanation: The zebras are safe! No lions around.
 
 ## Test Cases to Try
 
-| Input         | Expected Output |
-| ------------- | --------------- |
-| `"LZ"`        | 0               |
-| `"Z L"`       | 1               |
-| `"L     Z"`   | 5               |
-| `"L     L"`   | -1              |
-| `"Z   Z   Z"` | -1              |
-| `"L  ZL Z"`   | 0               |
+| Input             | Expected Output |
+| ----------------- | --------------- |
+| `"LZ"`            | 0               |
+| `"Z L"`           | 1               |
+| `"L     Z"`       | 5               |
+| `"L     L"`       | -1              |
+| `"Z   Z   Z"`     | -1              |
+| `"L  ZL Z"`       | 0               |
+| `"L Z L Z L Z"`   | 1               |
+| `"ZZZZZZ"`        | -1              |
+| `"LLLLLL"`        | -1              |
+| `"LZL Z LZ"`      | 0               |
+| `"L  Z   Z L"`    | 1               |
+| `"ZZ  L   ZZ"`    | 2               |
+| `"L   L   Z   Z"` | 3               |
+| `"Z L Z L Z L"`   | 1               |
+| `"LLL ZZZ"`       | 0               |
+| `"Z   Z   L"`     | 3               |
+| `"L ZZZZ L"`      | 1               |
+| `"ZL ZL ZL"`      | 0               |
+| `"L    Z    L"`   | 4               |
+| `"Z L  Z L"`      | 1               |
+| `"L L Z Z L"`     | 0               |
+
 
 ---
 
