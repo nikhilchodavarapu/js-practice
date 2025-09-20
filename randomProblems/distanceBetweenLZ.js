@@ -13,9 +13,13 @@ if (input[1] === " "){
 } else if (input[1] === "L" && isLion === false){
     console.log(distance);
     distance = 0;
+    isLion = true;
+    isZebra = false;
 } else if (input[1] === "Z" && isZebra === false){
     console.log(distance);
     distance = 0;
+    isLion = false;
+    isZebra = true;
 }
 
 // Checking whether is there any space in third character
@@ -24,9 +28,13 @@ if (input[2] === " "){
 } else if (input[2] === "L" && isLion === false){
     console.log(distance);
     distance = 0;
+    isLion = true;
+    isZebra = false;
 } else if (input[2] === "Z" && isZebra === false){
     console.log(distance);
     distance = 0;
+    isLion = false;
+    isZebra = true;
 }
 
 // Checking whether is there any space in fourth character
@@ -35,7 +43,56 @@ if (input[3] === " "){
 } else if (input[3] === "L" && isLion === false){
     console.log(distance);
     distance = 0;
+    isLion = true;
+    isZebra = false;
 } else if (input[3] === "Z" && isZebra === false){
     console.log(distance);
     distance = 0;
+    isLion = false;
+    isZebra = true;
+}
+
+// Checking whether is there any space in fifth character
+if (input[4] === " "){
+    distance++;
+} else if (input[4] === "L" && isLion === false){
+    console.log(distance);
+    distance = 0;
+    isLion = true;
+    isZebra = false;
+} else if (input[4] === "Z" && isZebra === false){
+    console.log(distance);
+    distance = 0;
+    isLion = false;
+    isZebra = true;
+}
+
+// Checking whether is there any space in sixth character
+if (input[5] === " "){
+    distance++;
+} else if (input[5] === "L" && isLion === false){
+    console.log(distance);
+    distance = 0;
+    isLion = true;
+    isZebra = false;
+} else if (input[5] === "Z" && isZebra === false){
+    console.log(distance);
+    distance = 0;
+    isLion = false;
+    isZebra = true;
+}
+
+// Checking whether is there any space in seventh character
+if (input[6] === " "){
+    distance++;
+} else if (input[6] === "L" && isLion === false){
+    console.log(distance);
+    distance = 0;
+    isLion = true;
+    isZebra = false;
+} else if (input[6] === "Z" && isZebra === false){
+    console.log(distance);
+    distance = 0;
+    isLion = false;
+    isZebra = true;
 }
