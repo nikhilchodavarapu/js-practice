@@ -1,10 +1,11 @@
-const input = "L  ZL Z";
+const input = "L     Z";
 
 let isLion = input[0] === "L";
 let isZebra = input[0] === "Z";
 let isSpace = input[0] === " ";
 
 let distance = 0;
+let minimumDistance = input.length;
 
 // Findind distance between First L and Z
 // Checking whether is there any space in second character
@@ -12,10 +13,12 @@ if (input[1] === " "){
     distance++;
 } else if (input[1] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[1] === "Z" && isZebra === false){
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     console.log(distance);
     distance = 0;
     isLion = false;
@@ -27,11 +30,13 @@ if (input[2] === " "){
     distance++;
 } else if (input[2] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[2] === "Z" && isZebra === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = false;
     isZebra = true;
@@ -42,11 +47,13 @@ if (input[3] === " "){
     distance++;
 } else if (input[3] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[3] === "Z" && isZebra === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = false;
     isZebra = true;
@@ -57,11 +64,13 @@ if (input[4] === " "){
     distance++;
 } else if (input[4] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[4] === "Z" && isZebra === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = false;
     isZebra = true;
@@ -72,11 +81,13 @@ if (input[5] === " "){
     distance++;
 } else if (input[5] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[5] === "Z" && isZebra === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = false;
     isZebra = true;
@@ -87,12 +98,16 @@ if (input[6] === " "){
     distance++;
 } else if (input[6] === "L" && isLion === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = true;
     isZebra = false;
 } else if (input[6] === "Z" && isZebra === false){
     console.log(distance);
+    minimumDistance = minimumDistance > distance ? distance : minimumDistance;
     distance = 0;
     isLion = false;
     isZebra = true;
 }
+
+console.log("minimum distance =>", minimumDistance);
