@@ -1,1 +1,5 @@
-console.log("The occurrence of substring ' 10 ' in number 65 is 1");
+const decimalNumber = 65;
+const substring = 10;
+let occurrence = 1;
+
+console.log("The occurrence of substring '", substring, "' in number", decimalNumber, "is", occurrence);
