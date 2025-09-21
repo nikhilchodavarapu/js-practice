@@ -1,12 +1,10 @@
 const number = 973;
-let numberModified = number;
-let numberOfDigits = 0;
+let numberModified = substring;
+let lastDigitsBase = 1;
 
 while ( numberModified >= 1){
-    numberOfDigits++;
+    lastDigitsBase = lastDigitsBase * 10;
     numberModified = numberModified / 10;
 }
 
-console.log("Number of Digits in", number, "is", numberOfDigits);
-
-let lastDigitsBase = 10 ** numberOfDigits;
+console.log(lastDigitsBase)
