@@ -1,6 +1,6 @@
 // Javascript program that counts how often a given sequence of `0`s and `1`s (a **substring**) appears 
 // inside the binary representation of a number. Substring occurrences may overlap.
-
+// Without process.
 
 let number = 65;
 let substring = 1;
