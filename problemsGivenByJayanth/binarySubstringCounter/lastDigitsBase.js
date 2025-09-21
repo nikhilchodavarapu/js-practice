@@ -8,3 +8,5 @@ while ( numberModified >= 1){
 }
 
 console.log("Number of Digits in", number, "is", numberOfDigits);
+
+let lastDigitsBase = 10 ** numberOfDigits;
