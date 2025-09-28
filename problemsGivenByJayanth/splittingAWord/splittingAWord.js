@@ -12,11 +12,11 @@ function isAlternate(isVowel, isConsonant){
 function splitAWord(word) {
   let remainingString = "";
   let newWord = word[0];
-  let isVowel = isVowel(newWord);
+  let isVowel = isLetterVowel(newWord);
   const lengthOfWord = word.length;
 
   for (let index = 1; index < lengthOfWord; index++) {
-    const isConsonant = !isVowel(word[index]);
+    const isConsonant = !isLetterVowel(word[index]);
     const isAlt = isAlternate(isVowel, isConsonant);
 
     if (isAlt) {
