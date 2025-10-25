@@ -102,6 +102,71 @@ function indexOfOperator() {
   return operatorIndex;
 }
 
+function shiftLeft(index, element) {
+  OPERANDS[index] = element;
+  for (let i = index + 1; i < OPERANDS.length - 1; i++) {
+    OPERANDS[i] = OPERANDS[i + 1];
+  }
+  for (let i = index; i < OPERATORS.length - 1; i++) {
+    OPERATORS[i] = OPERATORS[i + 1];
+  }
+  OPERANDS.pop();
+  OPERATORS.pop();
+}
+
+function clearEverything() {
+  const length = OPERATORS.length;
+  for (let index = 0; index < length; index++) {
+    OPERANDS.pop();
+    OPERATORS.pop();
+  }
+  OPERANDS.pop();
+}
+
+function placeResultInCalc() {
+  let value = "";
+  let operandIndex = 0;
+  let operatorIndex = 0;
+  while (operatorIndex < OPERATORS.length && operandIndex < OPERANDS.length) {
+    if (OPERATORS[operatorIndex] === '(') {
+      value += '(';
+    } else if (OPERATORS[operatorIndex + 1] === '(') {
+      value += OPERANDS[operandIndex] + OPERATORS[operatorIndex] + OPERATORS[++operatorIndex];
+    } else if(OPERATORS[operatorIndex] === ')' && operatorIndex !== OPERATORS.length - 1) {
+      value += OPERANDS[operandIndex] + OPERATORS[operatorIndex] + OPERATORS[++operatorIndex];
+    } else {
+      value += OPERANDS[operandIndex] + OPERATORS[operatorIndex];
+    }
+    operatorIndex++;
+    operandIndex++;
+  }
+  if (OPERATORS.length !== operatorIndex) {
+    value += OPERATORS[operatorIndex];
+  } 
+  if (OPERANDS.length !== operandIndex) {
+    value += OPERANDS[operandIndex];
+  }
+  console.log(value);
+  placeItInCalc(value);
+}
+
+function removeFromArray(valueIndex, noOfElements) {
+  for (let i = 0; i < noOfElements; i++) {
+    for (let i = valueIndex; i < OPERATORS.length - 1; i++) {
+      OPERATORS[i] = OPERATORS[i + 1];
+    }
+    OPERATORS.pop();
+  }
+  
+  for (let i = 0; i < noOfElements - 2; i++) {
+    for (let i = valueIndex; i < OPERANDS.length - 1; i++) {
+      OPERANDS[i] = OPERANDS[i + 1];
+    }
+    OPERANDS.pop();
+  }
+  console.log("Removed From Array =>", OPERANDS, OPERATORS)
+}
+
 function subCalculation(operatorIndex) {
   const valueString = CALCULATOR[2].join("");
   const currentValue = valueString.slice(1, 22).trim();
@@ -121,20 +186,8 @@ function subCalculation(operatorIndex) {
   clearEverything();
   separate();
   const valueIndex = OPERATORS.indexOf('(');
-  console.log("Sub Calculation =>", OPERANDS, OPERATORS);
-  for (let i = 0; i < (value.length + 1) / 2; i++) {
-    for (let i = valueIndex; i < OPERATORS.length - 1; i++) {
-      OPERATORS[i] = OPERATORS[i + 1];
-    }
-    OPERATORS.pop();
-  }
-  
-  for (let i = 0; i < (value.length + 1) / 2 - 2; i++) {
-    for (let i = valueIndex; i < OPERANDS.length - 1; i++) {
-      OPERANDS[i] = OPERANDS[i + 1];
-    }
-    OPERANDS.pop();
-  }
+  removeFromArray(valueIndex, (value.length + 1) / 2);
+  console.log("Guru Namaste !!")
   return result;
 }
 
@@ -150,34 +203,6 @@ function performOperation(x, y, operator, index) {
   }
 }
 
-function shiftLeft(index, element) {
-  OPERANDS[index] = element;
-  for (let i = index; i < OPERANDS.length - 2; i++) {
-    OPERANDS[i + 1] = OPERANDS[i + 2];
-    OPERATORS[i] = OPERATORS[i + 1];
-  }
-  OPERANDS.pop();
-  OPERATORS.pop();
-}
-
-function clearEverything() {
-  const length = OPERATORS.length;
-  for (let index = 0; index < length; index++) {
-    OPERANDS.pop();
-    OPERATORS.pop();
-  }
-  OPERANDS.pop();
-}
-
-function placeResultInCalc() {
-  let value = "";
-  for (let index = 0; index < OPERATORS.length; index++) {
-    value += OPERANDS[index] + OPERATORS[index];
-  }
-  value += OPERANDS[OPERANDS.length - 1];
-  placeItInCalc(value);
-}
-
 function calculate() {
   clearEverything();
   separate();
@@ -187,8 +212,8 @@ function calculate() {
     const index = indexOfOperator();
     result = performOperation(OPERANDS[index], OPERANDS[index + 1], OPERATORS[index], index);
     shiftLeft(index, result);
+    console.log("After Every Operation =>", OPERANDS, OPERATORS);
     placeItInCalc("");
-    console.log(OPERANDS, OPERATORS)
     placeResultInCalc();
     clearEverything();
     separate()
@@ -202,14 +227,12 @@ function takeInputs() {
   while (true) {
     let input = prompt("Enter number / operator (type 'exit' to exit) :");
     console.clear();
-    if (input === 'C') placeItInCalc("");
-    input === '=' ? calculate() : placeItInCalc(input);
-    displayCalculator();
     if (input === "exit") {
       return;
     }
-    // console.log(input, CALCULATOR[2][21])
-
+    if (input === '=') calculate();
+    else (input === 'C') ? placeItInCalc("") : placeItInCalc(input);
+    displayCalculator();
   }
 }
 
