@@ -117,32 +117,39 @@ const BLUE_LAST_MOVES = [[8, 69], [8, 75], [11, 69], [11, 75]];
 const GREEN_LAST_MOVES = [[35, 69], [35, 75], [38, 69], [38, 75]];
 const YELLOW_LAST_MOVES = [[35, 15], [35, 21], [38, 15], [38, 21]];
 
-function redHome() {
-  BOARD[8][15] = RED_COINS.includes(1) ? "\x1b[40m" + "\x1b[91m" + "1" + "\x1b[0m" : " ";
-  BOARD[8][21] = RED_COINS.includes(2) ? "\x1b[40m" + "\x1b[91m" + "2" + "\x1b[0m" : " ";
-  BOARD[11][15] = RED_COINS.includes(3) ? "\x1b[40m" + "\x1b[91m" + "3" + "\x1b[0m" : " ";
-  BOARD[11][21] = RED_COINS.includes(4) ? "\x1b[40m" + "\x1b[91m" + "4" + "\x1b[0m" : " ";
+const COLORS = [
+  "\x1b[40m" + "\x1b[36m",
+  "\x1b[40m" + "\x1b[31m",
+  "\x1b[40m" + "\x1b[32m",
+  "\x1b[40m" + "\x1b[33m"
+]
+
+function coinsInBlueHome() {
+  BOARD[35][15] = BLUE_COINS.includes(1) ? COLORS[0] + "1" + "\x1b[0m" : " ";
+  BOARD[35][21] = BLUE_COINS.includes(2) ? COLORS[0] + "2" + "\x1b[0m" : " ";
+  BOARD[38][15] = BLUE_COINS.includes(3) ? COLORS[0] + "3" + "\x1b[0m" : " ";
+  BOARD[38][21] = BLUE_COINS.includes(4) ? COLORS[0] + "4" + "\x1b[0m" : " ";
 }
 
-function greenHome() {
-  BOARD[8][69] = GREEN_COINS.includes(1) ? "\x1b[40m" + "\x1b[92m" + "1" + "\x1b[0m" : " ";
-  BOARD[8][75] = GREEN_COINS.includes(2) ? "\x1b[40m" + "\x1b[92m" + "2" + "\x1b[0m" : " ";
-  BOARD[11][69] = GREEN_COINS.includes(3) ? "\x1b[40m" + "\x1b[92m" + "3" + "\x1b[0m" : " ";
-  BOARD[11][75] = GREEN_COINS.includes(4) ? "\x1b[40m" + "\x1b[92m" + "4" + "\x1b[0m" : " ";
+function coinsInRedHome() {
+  BOARD[8][15] = RED_COINS.includes(1) ? COLORS[1] + "1" + "\x1b[0m" : " ";
+  BOARD[8][21] = RED_COINS.includes(2) ? COLORS[1] + "2" + "\x1b[0m" : " ";
+  BOARD[11][15] = RED_COINS.includes(3) ? COLORS[1] + "3" + "\x1b[0m" : " ";
+  BOARD[11][21] = RED_COINS.includes(4) ? COLORS[1] + "4" + "\x1b[0m" : " ";
 }
 
-function yellowHome() {
-  BOARD[35][69] = YELLOW_COINS.includes(1) ? "\x1b[40m" + "\x1b[93m" + "1" + "\x1b[0m" : " ";
-  BOARD[35][75] = YELLOW_COINS.includes(2) ? "\x1b[40m" + "\x1b[93m" + "2" + "\x1b[0m" : " ";
-  BOARD[38][69] = YELLOW_COINS.includes(3) ? "\x1b[40m" + "\x1b[93m" + "3" + "\x1b[0m" : " ";
-  BOARD[38][75] = YELLOW_COINS.includes(4) ? "\x1b[40m" + "\x1b[93m" + "4" + "\x1b[0m" : " ";
+function coinsInGreenHome() {
+  BOARD[8][69] = GREEN_COINS.includes(1) ? COLORS[2] + "1" + "\x1b[0m" : " ";
+  BOARD[8][75] = GREEN_COINS.includes(2) ? COLORS[2] + "2" + "\x1b[0m" : " ";
+  BOARD[11][69] = GREEN_COINS.includes(3) ? COLORS[2] + "3" + "\x1b[0m" : " ";
+  BOARD[11][75] = GREEN_COINS.includes(4) ? COLORS[2] + "4" + "\x1b[0m" : " ";
 }
 
-function blueHome() {
-  BOARD[35][15] = BLUE_COINS.includes(1) ? "\x1b[40m" + "\x1b[96m" + "1" + "\x1b[0m" : " ";
-  BOARD[35][21] = BLUE_COINS.includes(2) ? "\x1b[40m" + "\x1b[96m" + "2" + "\x1b[0m" : " ";
-  BOARD[38][15] = BLUE_COINS.includes(3) ? "\x1b[40m" + "\x1b[96m" + "3" + "\x1b[0m" : " ";
-  BOARD[38][21] = BLUE_COINS.includes(4) ? "\x1b[40m" + "\x1b[96m" + "4" + "\x1b[0m" : " ";
+function coinsInYellowHome() {
+  BOARD[35][69] = YELLOW_COINS.includes(1) ? COLORS[3] + "1" + "\x1b[0m" : " ";
+  BOARD[35][75] = YELLOW_COINS.includes(2) ? COLORS[3] + "2" + "\x1b[0m" : " ";
+  BOARD[38][69] = YELLOW_COINS.includes(3) ? COLORS[3] + "3" + "\x1b[0m" : " ";
+  BOARD[38][75] = YELLOW_COINS.includes(4) ? COLORS[3] + "4" + "\x1b[0m" : " ";
 }
 
 function colourBoard(row, col) {
@@ -187,10 +194,10 @@ function colourBoard(row, col) {
 }
 
 function coinsInHome() {
-  redHome();
-  greenHome();
-  blueHome();
-  yellowHome();
+  coinsInRedHome();
+  coinsInGreenHome();
+  coinsInBlueHome();
+  coinsInYellowHome();
 }
 
 function isInSafeJone() {
@@ -258,16 +265,16 @@ function addToBoard(indexes, coin, color = "", LAST_MOVES) {
 
 function startCoin(player, coin) {
   switch (player) {
-    case 1: addToBoard([BLUE_PATH[0][0], BLUE_PATH[0][1]], coin, "\x1b[40m" + "\x1b[96m"); break;
-    case 2: addToBoard([RED_PATH[0][0], RED_PATH[0][1]], coin, "\x1b[40m" + "\x1b[91m"); break;
-    case 3: addToBoard([GREEN_PATH[0][0], GREEN_PATH[0][1]], coin, "\x1b[40m" + "\x1b[92m"); break;
-    case 4: addToBoard([YELLOW_PATH[0][0], YELLOW_PATH[0][1]], coin, "\x1b[40m" + "\x1b[93m"); break;
+    case 1: addToBoard([BLUE_PATH[0][0], BLUE_PATH[0][1]], coin, COLORS[0]); break;
+    case 2: addToBoard([RED_PATH[0][0], RED_PATH[0][1]], coin, COLORS[1]); break;
+    case 3: addToBoard([GREEN_PATH[0][0], GREEN_PATH[0][1]], coin, COLORS[2]); break;
+    case 4: addToBoard([YELLOW_PATH[0][0], YELLOW_PATH[0][1]], coin, COLORS[3]); break;
   }
 }
 
-function moveInPath(path, count, moves, coin) {
+function moveInPath(path, count, moves, coin, color) {
   for (let index = count; index <= count + moves; index++) {
-    displayBoard(path[index], coin, "\x1b[40m" + "\x1b[32m");
+    displayBoard(path[index], coin, color);
     delay()
   }
   console.log(count, moves)
@@ -398,19 +405,11 @@ function killIt(player, coin) {
   for (let index = count; index >= 0; index--) {
     displayBoard(PATH[index], +coin[10], "\x1b[40m" + "\x1b[32m");
     delay()
-    console.log('Em jaruguthundhi bhAAi')
   }
   noOfMoves[index - 1] = -1;
   const coinsInHome = selectCoinsInHome(player);
   coinsInHome[index - 1] = index;
 }
-
-const colours = [
-  "\x1b[36m",
-  "\x1b[31m",
-  "\x1b[32m",
-  "\x1b[33m"
-]
 
 function roll(currentPlayer) {
   let randomValue = Math.floor(Math.random() * 7);
@@ -418,7 +417,7 @@ function roll(currentPlayer) {
     console.clear();
     randomValue = Math.floor(Math.random() * 7);
     displayBoard(100, 100);
-    console.log(colours[currentPlayer - 1] + POSSIBLE_VALUES[randomValue] + "\x1b[0m")
+    console.log(COLORS[currentPlayer - 1] + POSSIBLE_VALUES[randomValue] + "\x1b[0m")
     delayRoll()
   }
 
@@ -427,39 +426,42 @@ function roll(currentPlayer) {
   return randomValue;
 }
 
-function play() {
-  let player = 0;
+function play(PLAYERS) {
+  let gamer = 0;
   while (!isGameFinished()) {
-    const currentPlayer = (player % 4) + 1;
+    const currentPlayer = (gamer % 4) + 1;
     displayBoard([100, 100])
-    let wait = prompt(`Player-${currentPlayer} Turn (Click Enter to Roll)`)
+    const color = COLORS[currentPlayer - 1];
+    let wait = prompt(`${color}${PLAYERS[currentPlayer - 1]}'s Turn (Click Enter to Roll)`)
     let moves = roll(currentPlayer);
-    wait = prompt("Move => " + moves + " (Click Enter to continue)")
+    console.log(color + "\n_____________________________________\n")
+    wait = prompt(color + "Outcome => " + moves + "\n(Click Enter to continue)")
     const coin = findTheSoloCoin(currentPlayer, moves);
     if (coin === -100 && moves !== 6) {
-      player++;
+      gamer++;
       continue;
     }
-    const respone = coin === -1 || moves === 6 ? +prompt("Pick a pikka :") : coin;
+    const respone = coin === -1 || moves === 6 ? +prompt("Pick a Coin (1, 2, 3, 4) :") : coin;
     const noOfMoves = selectCoinMoves(currentPlayer);
     const count = noOfMoves[respone - 1];
     const PATH = selectPath(currentPlayer);
     const LAST_MOVES = selectLastMoves(currentPlayer);
+
     if (moves === 6 && count === -1) {
       noOfMoves[respone - 1] += 1;
       modifyHomeCoins(currentPlayer, respone);
       console.log(count)
-      moveInPath(PATH, 0, 0, respone);
-      addToBoard(PATH[0], respone, "\x1b[40m" + "\x1b[32m", LAST_MOVES);
+      moveInPath(PATH, 0, 0, respone, color);
+      addToBoard(PATH[0], respone, color, LAST_MOVES);
     } else if (count !== -1) {
       console.log(respone)
       clearOldMove(LAST_MOVES, respone);
-      moveInPath(PATH, count, moves, respone);
+      moveInPath(PATH, count, moves, respone, color);
       noOfMoves[respone - 1] += moves;
       const occupied = isOccupiedBy(PATH[noOfMoves[respone-1]], currentPlayer)
-      addToBoard(PATH[count + moves], respone, "\x1b[40m" + "\x1b[32m", LAST_MOVES);
+      addToBoard(PATH[count + moves], respone, color, LAST_MOVES);
+
       if (occupied !== -1) {
-        console.log("Anna Namaste")
         killIt(occupied[0], occupied[1])
       }
     }
@@ -468,13 +470,24 @@ function play() {
       continue;
     }
     displayBoard([100, 100])
-    player++;
+    gamer++;
   }
 }
-// for (let index = 0; index < RED_PATH.length; index++) {
-//   displayBoard(RED_PATH[index]);
-//   delay();
-// }
-play()
-// console.clear()
-// displayBoard([100, 100])
+
+function namesOfThePlayers() {
+  console.clear();
+  console.log("ENTER NAMES OF THE PLAYERS");
+  console.log("__________________________");
+  const player1 = prompt("Enter name of the player - 1 (BLUE) : ")
+  const player2 = prompt("Enter name of the player - 2 (RED) : ")
+  const player3 = prompt("Enter name of the player - 3 (GREEN) : ")
+  const player4 = prompt("Enter name of the player - 4 (YELLOW) : ")
+  return [player1, player2, player3, player4];
+}
+
+function main() {
+  const players = namesOfThePlayers();
+  play(players);
+}
+
+main();
