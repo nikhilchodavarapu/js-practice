@@ -145,26 +145,32 @@ function clearOldMove(move) {
   placePieceInSqr([prevRow, prevCol], " ");
 }
 
-function changeMove(initial, pieceNumber, side, move) {
-  const prevPlaces = currentPlaces[side];
-  let prevMoveIndex = 0;
+function findMoveIndex(initial, pieceNumber) {
+  let moveIndex = 0;
+
   switch(initial) {
     case 'K' :
-      prevMoveIndex = 3;
+      moveIndex = 3;
       break;
     case 'Q' :
-      prevMoveIndex = 4;
+      moveIndex = 4;
       break;
     case 'R' :
-      prevMoveIndex = pieceNumber === 1 ? 0 : 7;
+      moveIndex = pieceNumber === 1 ? 0 : 7;
       break;
     case 'N' :
-      prevMoveIndex = pieceNumber === 1 ? 1 : 6;
+      moveIndex = pieceNumber === 1 ? 1 : 6;
       break;
     case 'B' :
-      prevMoveIndex = pieceNumber === 1 ? 2 : 5;
+      moveIndex = pieceNumber === 1 ? 2 : 5;
       break;
   }
+  return moveIndex;
+}
+
+function changeMove(initial, pieceNumber, side, move) {
+  const prevPlaces = currentPlaces[side];
+  let prevMoveIndex = findMoveIndex(initial, pieceNumber);
   const prevMove = prevPlaces[prevMoveIndex];
   prevPlaces[prevMoveIndex] = move;
   clearOldMove(prevMove);
@@ -178,7 +184,6 @@ function isAnythingInSqr(move) {
 }
 
 function isInValidPawnMove(pieceNumber, move, side) {
-  return false;
   const currentMove = currentPlaces[side][7 + pieceNumber];
   const nextSqrIndex = findRow(currentMove[0]) + 1;
   const prevSqrIndex = findRow(currentMove[0]) - 1;
@@ -192,28 +197,23 @@ function isInValidPawnMove(pieceNumber, move, side) {
   }
   
   if (isAnythingInSqr("a" + move)) return true;
+  return false;
   
 }
 
 function isInValidKingMove(move, side) {
-  const currentMove = currentPlaces[side][3];
-  const currentRow = findRow(currentMove[1]);
-  const currentCol = parseInt(currentMove[2]);
-
-  const row = findRow(move[1]);
-  const col = parseInt(move[2]);
-
-  if (Math.abs(row - currentRow) > 1 ||
-  Math.abs(col - currentCol) > 1 ||
-  (Math.abs(col - currentCol) === 0 && Math.abs(row - currentRow) === 0) ||
+  if (Math.abs(nextRow - currentRow) > 1 ||
+  Math.abs(nextCol - currentCol) > 1 ||
+  (Math.abs(nextCol - currentCol) === 0 && Math.abs(nextRow - currentRow) === 0) ||
   isAnythingInSqr(move)){
-    console.log(row - currentRow)
-    console.log(col - currentCol)
+    console.log(nextRow - currentRow)
+    console.log(nextCol - currentCol)
     return true;
   }
 
   return false;
 }
+
 
 function isSqrOccupied(currentRow, currentCol, nextRow, nextCol, rowIncrement, colIncrement) {
   let isOccupied = false;
@@ -232,26 +232,46 @@ function isSqrOccupied(currentRow, currentCol, nextRow, nextCol, rowIncrement, c
   return isOccupied;
 }
 
-function isInValidBishopMove(pieceNumber, move, side) {
-  const moveIndex = pieceNumber === 1 ? 2 : 5;
-  const currentMove = currentPlaces[side][moveIndex];
-  const currentRow = findRow(currentMove[1]);
-  const currentCol = parseInt(currentMove[2]);
-  console.log(currentRow, currentCol)
-
-  const nextRow = findRow(move[1]);
-  const nextCol = parseInt(move[2]);
-
+function isInValidBishopMove(currentRow, currentCol, nextRow, nextCol) {
   if (Math.abs(nextRow - currentRow) !== Math.abs(nextCol - currentCol)) return true;
-
+  console.log("Namaste Guru!!")
   let rowIncrement = currentRow < nextRow ? 1 : -1;
   let colIncrement = currentCol < nextCol ? 1 : -1;
 
   return isSqrOccupied(currentRow, currentCol, nextRow, nextCol, rowIncrement, colIncrement);
 }
 
-function isInValidRookMove(pieceNumber, move, side) {
-  const moveIndex = pieceNumber === 1 ? 0 : 7;
+function isInValidRookMove(currentRow, currentCol, nextRow, nextCol) {
+  if (currentCol !== nextCol && currentRow !== nextRow) return true;
+  console.log("BhAAi!!")
+  let rowIncrement = currentRow > nextRow ? -1 : 1;
+  let colIncrement = currentCol > nextCol ? -1 : 1;
+  rowIncrement = currentRow === nextRow ? 0 : rowIncrement;
+  colIncrement = currentCol === nextCol ? 0 : colIncrement;
+  return isSqrOccupied(currentRow, currentCol, nextRow, nextCol, rowIncrement, colIncrement);
+}
+
+function isInValidQueenMove(currentRow, currentCol, nextRow, nextCol) {
+  const canGoCrossly = isInValidBishopMove(currentRow, currentCol, nextRow, nextCol);
+  const canGoStraightly = isInValidRookMove(currentRow, currentCol, nextRow, nextCol);
+  console.log(canGoCrossly, canGoStraightly)
+  return canGoCrossly && canGoStraightly;
+}
+
+function isInValidKnightMove(currentRow, currentCol, nextRow, nextCol) {
+  const validDistance = [[1, -1],[2, -2]];
+  const rowDistance = nextRow - currentRow;
+  const colDistance = nextCol - currentCol;
+  if (!(validDistance[0].includes(rowDistance) && validDistance[1].includes(colDistance))
+    && !(validDistance[1].includes(rowDistance) && validDistance[0].includes(colDistance))) return true;
+  const sqaures = ' abcdefgh';
+  const move = 'N' + sqaures[nextRow] + nextCol;
+  if (isAnythingInSqr(move)) return true;
+  return false;
+}
+
+function isInValidMove(pieceNumber, move, side) {
+  const moveIndex = findMoveIndex(move[0], pieceNumber);
   const currentMove = currentPlaces[side][moveIndex];
   const currentRow = findRow(currentMove[1]);
   const currentCol = parseInt(currentMove[2]);
@@ -259,36 +279,29 @@ function isInValidRookMove(pieceNumber, move, side) {
 
   const nextRow = findRow(move[1]);
   const nextCol = parseInt(move[2]);
-  
-  if (currentCol !== nextCol && currentRow !== nextRow) return true;
 
-  let rowIncrement = currentRow > nextRow ? -1 : 1;
-  let colIncrement = currentCol > nextCol ? -1 : 1;
-  rowIncrement = currentRow === nextRow ? 0 : rowIncrement;
-  colIncrement = currentCol === nextCol ? 0 : colIncrement;
-
-  return isSqrOccupied(currentRow, currentCol, nextRow, nextCol, rowIncrement, colIncrement);
-}
-
-function isInValidMove(pieceNumber, move, side) {
   if (isPawn(move[0])) {
     return isInValidPawnMove(pieceNumber, move, side);
   }
 
   if (move[0] === 'K') {
-    return isInValidKingMove(move, side);
+    return isInValidKingMove(currentRow, currentCol, nextRow, nextCol);
   }
 
   if (move[0] === 'B') {
-    return isInValidBishopMove(pieceNumber, move, side);
+    return isInValidBishopMove(currentRow, currentCol, nextRow, nextCol);
   }
 
   if (move[0] === 'R') {
-    return isInValidRookMove(pieceNumber, move, side);
+    return isInValidRookMove(currentRow, currentCol, nextRow, nextCol);
+  }
+  
+  if (move[0] === 'Q') {
+    return isInValidQueenMove(currentRow, currentCol, nextRow, nextCol);
   }
 
-  if (move[0] === 'Q') {
-    
+  if (move[0] === 'N') {
+    return isInValidKnightMove(currentRow, currentCol, nextRow, nextCol);
   }
 }
 
