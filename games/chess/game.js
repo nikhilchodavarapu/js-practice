@@ -164,6 +164,8 @@ function findMoveIndex(initial, pieceNumber) {
     case 'B' :
       moveIndex = pieceNumber === 1 ? 2 : 5;
       break;
+    default :
+      moveIndex = 7 + pieceNumber;
   }
   return moveIndex;
 }
@@ -305,18 +307,70 @@ function isInValidMove(pieceNumber, move, side) {
   }
 }
 
+function askForPiece(initial, side, pieceNumber) {
+  const moveIndex = findMoveIndex(initial, pieceNumber);
+  const currentMove = currentPlaces[side][moveIndex];
+  let currentRow = findRow(currentMove[1]);
+  let currentCol = +currentMove[2];
+
+  if (initial === 'P') {
+    currentRow = findRow(currentMove[0]);
+    currentCol = +currentMove[1];
+  }
+
+  const firstRow = rowInBoard(currentRow) - 1;
+  const firstCol = colInBoard(currentCol) - 2;
+  const lastRow = rowInBoard(currentRow) + 1;
+  const lastCol = colInBoard(currentCol) + 2;
+
+  let string = '';
+  let color = "\x1b[40m\x1b[37m";
+  const resetColor = "\x1b[0m";
+
+  for (let col = 0; col < BOARD[0].length; col++) {
+    string += color + BOARD[0][col] + resetColor;
+  }
+  string += '\n';
+
+  for (let row = 1; row < BOARD.length; row++) {
+    color = (row - 1) % 3 === 0 ? toggleColor(color) : color;
+    for (let col = 0; col < BOARD[row].length; col++) {
+      if (row >= firstRow && row <= lastRow && col >= firstCol && col <= lastCol) {
+        let checkColor = (col % 6 === 0) && (col !== BOARD[row].length - 1) ? toggleColor(color) : color;
+        checkColor = checkColor === "\x1b[40m\x1b[37m" ? "\x1b[48;5;247m\x1b[30m" : "\x1b[48;5;250m\x1b[37m"
+        string += "\x1b[48;5;153m\x1b[30m" + BOARD[row][col] + resetColor;
+      } else {
+        color = (col % 6 === 0) && (col !== BOARD[row].length - 1) ? toggleColor(color) : color;
+        string += col === BOARD[row].length - 1 || col === 0 ? "\x1b[40m\x1b[37m" : color;
+        string += BOARD[row][col] + resetColor;
+      }
+    }
+    string += '\n';
+  }
+
+  console.clear();
+  console.log(string);
+
+  return confirm("Is this piece ?");
+}
+
 function movePawn(side) {
   let pawn = 1;
   let pieceFound = false;
   let prevMove = currentPlaces[side][8];
   while (pawn < 8 && !pieceFound) {
-    pieceFound = confirm("Is this piece ?");
+    pieceFound = askForPiece('P', side, pawn);
     prevMove = currentPlaces[side][7+pawn];
     pawn++;
+  }
+  if (!pieceFound && !askForPiece('P', side, pawn)) {
+    return -1;
   }
   prevMove = pieceFound ? prevMove : currentPlaces[side][15];
   const prevRow = findRow(prevMove[0]);
   const prevCol = parseInt(prevMove[1]);
+
+  console.log("\nMove Notation => initial + horizontal notation + vertical notation (Ex : King to f4 => Kf4)\n");
   const move = prompt("Enter move : ");
 
   if (isInValidMove(pawn - 1, move, side)) return -1;
@@ -329,9 +383,16 @@ function movePawn(side) {
 function movePiece(piece, side) {
   const initial = piece[0];
   if (initial === 'P') return movePawn(side);
-  let pieceFound = confirm("Is this piece ?");
-  const pieceNumber =  pieceFound ? 1 : 2;
+  let pieceNumber = 1;
+  if (!askForPiece(initial, side, pieceNumber)) {
+    if (!askForPiece(initial, side, ++pieceNumber)) {
+      return -1;
+    }
+  }
+
   console.log(pieceNumber)
+
+  console.log("\nMove Notation => initial + horizontal notation + vertical notation (Ex : King to f4 => Kf4)\n");
   const move = prompt("Enter move : ");
 
   if (isInValidMove(pieceNumber, move, side)) return -1;
@@ -349,11 +410,16 @@ function play() {
   while (!isGameFinished()) {
     player = player === 1 ? 0 : 1; 
     const side = player === 0 ? 'white' : 'black';
+    console.log("Horizontal Notation => (1, 2, 3, 4, 5, 6, 7, 8)");
+    console.log("Vertical Notation => (a, b, c, d, e, f, g, h)");
+    console.log("Pieces names => (pawn, rook, knight, bishop, king, queen)\n");
     const pieceType = prompt("Enter the name of the piece to move : ");
     const result = movePiece(pieceType.toUpperCase(), side);
     if (result === -1) {
       player = player === 1 ? 0 : 1; 
-      console.log("Invalid Move bhAAi");
+      console.clear()
+      displayBoard();
+      console.log("\nInvalid Move bhAAi\n");
       continue;
     }
     console.clear()
