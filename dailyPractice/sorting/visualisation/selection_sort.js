@@ -2,10 +2,6 @@ const delay = function () {
   for (let i = 0; i < 2000000000; i++);
 }
 
-const pad = function (element) {
-  return (element + "").padStart(2);
-}
-
 const toGraph = function (number) {
   let element = [];
   for (let i = 0; i < 65 - number - 1; i++) {
@@ -14,12 +10,9 @@ const toGraph = function (number) {
 
   element.push('____');
   
-  for (let i = 0; i < number - 1; i++) {
+  for (let i = 0; i < number; i++) {
     element.push('|  |');
   }
-
-  const paddedNumber = pad(number);
-  element.push(`|${paddedNumber}|`)
   
   // console.log(element.join('\n'));
   return element;
@@ -58,16 +51,16 @@ const sort = function (data, compare) {
   console.log(represent(sortedData, 0, 1));
   delay();
   for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < data.length - i - 1; j++) {
+    for (let j = i + 1; j < data.length; j++) {
       console.clear();
-      console.log(represent(sortedData, j, j + 1));
+      console.log(represent(sortedData, i, j));
       delay();
-      if (compare(sortedData[j], sortedData[j + 1])) {
-        const temp = sortedData[j + 1];
-        sortedData[j + 1] = sortedData[j];
+      if (compare(sortedData[i], sortedData[j])) {
+        const temp = sortedData[i];
+        sortedData[i] = sortedData[j];
         sortedData[j] = temp;
         console.clear();
-        console.log(represent(sortedData, j, j + 1));
+        console.log(represent(sortedData, i, j));
         delay();
       }
     }
@@ -76,12 +69,8 @@ const sort = function (data, compare) {
   return sortedData;
 };
 
-function main(args) {
-  const data = [];
-  for (let i = 0; i < args.length; i++) {
-    data.push(parseInt(args[i]));
-  }
-  sort(data, greaterThan)
+function main(data) {
+  console.log(sort(data, greaterThan));
 }
 
 main(Deno.args);

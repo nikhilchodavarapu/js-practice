@@ -53,23 +53,32 @@ const greaterThan = function (a, b) {
 };
 
 const sort = function (data, compare) {
-  const sortedData = data.slice();
+  const sortedData = [data[0]];
+  const unSortedData = data.slice(1, data.length);
+  let visualData = data.slice();
   console.clear();
-  console.log(represent(sortedData, 0, 1));
+  console.log(represent(visualData, 0, 1));
   delay();
-  for (let i = 0; i < data.length; i++) {
-    for (let j = 0; j < data.length - i - 1; j++) {
+  while (unSortedData.length > 0) {
+    sortedData.push(unSortedData.shift());
+    let j = sortedData.length - 1;
+    let islessThan = true;
+    while (j >= 1 && islessThan) {
       console.clear();
-      console.log(represent(sortedData, j, j + 1));
+      visualData = sortedData.concat(unSortedData);
+      console.log(represent(visualData, j - 1, j));
       delay();
-      if (compare(sortedData[j], sortedData[j + 1])) {
-        const temp = sortedData[j + 1];
-        sortedData[j + 1] = sortedData[j];
-        sortedData[j] = temp;
+      if (compare(sortedData[j - 1], sortedData[j])) {
+        const temp = sortedData[j];
+        sortedData[j] = sortedData[j - 1];
+        sortedData[j - 1] = temp;
+        islessThan = true;
         console.clear();
-        console.log(represent(sortedData, j, j + 1));
+        visualData = sortedData.concat(unSortedData);
+        console.log(represent(visualData, j - 1, j));
         delay();
-      }
+      } else islessThan = false;
+      j--;
     }
   }
 
@@ -81,7 +90,7 @@ function main(args) {
   for (let i = 0; i < args.length; i++) {
     data.push(parseInt(args[i]));
   }
-  sort(data, greaterThan)
+  sort(data, greaterThan);
 }
 
 main(Deno.args);
